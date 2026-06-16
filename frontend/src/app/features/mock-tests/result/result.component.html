@@ -1,0 +1,78 @@
+<div class="result-container" *ngIf="evaluation">
+  
+  <div class="header-section">
+    <h1>Interview Evaluation Result</h1>
+    <p>AI-generated feedback based on your responses.</p>
+  </div>
+
+  <div class="score-card-container">
+    <mat-card class="score-card main-card">
+      <mat-card-header>
+        <mat-icon class="header-icon">analytics</mat-icon>
+        <mat-card-title>Overall Score</mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="score-content">
+        <div class="score-circle">
+          <svg viewBox="0 0 36 36" class="circular-chart">
+            <path class="circle-bg"
+              d="M18 2.0845
+                a 15.9155 15.9155 0 0 1 0 31.831
+                a 15.9155 15.9155 0 0 1 0 -31.831"
+            />
+            <path class="circle"
+              [style.strokeDasharray]="evaluation.score + ', 100'"
+              d="M18 2.0845
+                a 15.9155 15.9155 0 0 1 0 31.831
+                a 15.9155 15.9155 0 0 1 0 -31.831"
+            />
+          </svg>
+          <div class="score-text" [ngClass]="getScoreColorClass()">{{ evaluation.score }}%</div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div class="feedback-grid">
+    <mat-card class="feedback-card strengths">
+      <mat-card-header>
+        <mat-icon color="primary">thumb_up</mat-icon>
+        <mat-card-title>Key Strengths</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <ul>
+          <li *ngFor="let s of evaluation.strengths">{{ s }}</li>
+          <li *ngIf="!evaluation.strengths || evaluation.strengths.length === 0">No distinct strengths identified.</li>
+        </ul>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="feedback-card weaknesses">
+      <mat-card-header>
+        <mat-icon color="warn">trending_down</mat-icon>
+        <mat-card-title>Areas to Improve</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <ul>
+          <li *ngFor="let w of evaluation.weaknesses">{{ w }}</li>
+          <li *ngIf="!evaluation.weaknesses || evaluation.weaknesses.length === 0">No major weaknesses identified.</li>
+        </ul>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <mat-card class="improvement-card">
+    <mat-card-header>
+      <mat-icon color="accent">lightbulb</mat-icon>
+      <mat-card-title>Final Recommendation</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p>{{ evaluation.improvement || 'Keep practicing and improving your communication skills!' }}</p>
+    </mat-card-content>
+  </mat-card>
+
+  <div class="action-footer">
+    <button mat-flat-button color="primary" routerLink="/dashboard">Return to Dashboard</button>
+    <button mat-stroked-button color="primary" routerLink="/mock-tests">Take Another Test</button>
+  </div>
+
+</div>

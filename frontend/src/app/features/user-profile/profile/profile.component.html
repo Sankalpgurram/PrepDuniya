@@ -1,0 +1,72 @@
+<div class="profile-container" [@pageAnimations]>
+  <div class="header-section">
+    <div class="profile-header">
+      <div class="avatar-wrapper" [@fadeIn]>
+        <img [src]="getAvatar()" alt="User Avatar" class="profile-avatar">
+        <div class="online-status"></div>
+      </div>
+      <div class="user-info">
+        <h1>{{ userProfile?.name }}</h1>
+        <p class="email">{{ userProfile?.email }}</p>
+        <span class="role-badge">{{ userProfile?.role }}</span>
+      </div>
+    </div>
+    <button mat-flat-button color="primary" class="edit-btn">
+      <mat-icon>edit</mat-icon> Edit Profile
+    </button>
+  </div>
+
+  <div class="stats-grid">
+    <mat-card class="stat-card" [@cardHover]>
+      <mat-card-content>
+        <div class="stat-icon ats"><mat-icon>analytics</mat-icon></div>
+        <div class="stat-content">
+          <h3>ATS Score</h3>
+          <p class="stat-value">{{ userProfile?.ats_score || 0 }}%</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-card" [@cardHover]>
+      <mat-card-content>
+        <div class="stat-icon interview"><mat-icon>forum</mat-icon></div>
+        <div class="stat-content">
+          <h3>Interviews</h3>
+          <p class="stat-value">12</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-card" [@cardHover]>
+      <mat-card-content>
+        <div class="stat-icon jobs"><mat-icon>work</mat-icon></div>
+        <div class="stat-content">
+          <h3>Jobs Matched</h3>
+          <p class="stat-value">8</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div class="activity-section">
+    <h2>Recent Activity</h2>
+    <div class="activity-list">
+      <div class="activity-item" [@fadeIn]>
+        <div class="activity-icon"><mat-icon>description</mat-icon></div>
+        <div class="activity-details">
+          <p class="activity-text">Resume analyzed for <strong>Senior Web Developer</strong></p>
+          <span class="activity-date">2 days ago</span>
+        </div>
+        <div class="activity-score">85%</div>
+      </div>
+      <div class="activity-item" [@fadeIn]>
+        <div class="activity-icon"><mat-icon>assignment_turned_in</mat-icon></div>
+        <div class="activity-details">
+          <p class="activity-text">Mock Interview completed for <strong>Google</strong></p>
+          <span class="activity-date">5 days ago</span>
+        </div>
+        <div class="activity-score">92%</div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,110 @@
+<div class="view-container">
+
+  <!-- Header -->
+  <div class="page-header">
+    <div>
+      <h1>Coding Practice</h1>
+      <p>Sharpen your skills with AI-evaluated problems. Master DSA for top tech companies.</p>
+    </div>
+    <div class="header-actions">
+      <button mat-stroked-button color="primary" routerLink="/coding/leaderboard">
+        <mat-icon>leaderboard</mat-icon>
+        Leaderboard
+      </button>
+    </div>
+  </div>
+
+  <!-- Stats Row -->
+  <div class="stats-row" *ngIf="!isLoading()">
+    <div class="stat-pill">
+      <span class="pill-label">Total</span>
+      <span class="pill-val">{{ stats().total }}</span>
+    </div>
+    <div class="stat-pill solved-pill">
+      <mat-icon>check_circle</mat-icon>
+      <span class="pill-label">Solved</span>
+      <span class="pill-val">{{ stats().solved }}</span>
+    </div>
+    <div class="stat-pill easy-pill">
+      <span class="pill-label">Easy</span>
+      <span class="pill-val">{{ stats().easy }}</span>
+    </div>
+    <div class="stat-pill med-pill">
+      <span class="pill-label">Medium</span>
+      <span class="pill-val">{{ stats().medium }}</span>
+    </div>
+    <div class="stat-pill hard-pill">
+      <span class="pill-label">Hard</span>
+      <span class="pill-val">{{ stats().hard }}</span>
+    </div>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <div class="filter-tabs">
+      <button class="filter-tab" [class.active]="selectedDifficulty() === 'all'" (click)="setDifficulty('all')">All</button>
+      <button class="filter-tab easy" [class.active]="selectedDifficulty() === 'easy'" (click)="setDifficulty('easy')">Easy</button>
+      <button class="filter-tab medium" [class.active]="selectedDifficulty() === 'medium'" (click)="setDifficulty('medium')">Medium</button>
+      <button class="filter-tab hard" [class.active]="selectedDifficulty() === 'hard'" (click)="setDifficulty('hard')">Hard</button>
+    </div>
+    <div class="search-box">
+      <mat-icon>search</mat-icon>
+      <input type="text" placeholder="Search problems..." (input)="setSearch($event)">
+    </div>
+  </div>
+
+  <!-- Loading Skeleton -->
+  <div *ngIf="isLoading()" class="skeleton-rows">
+    <div class="skeleton-row" *ngFor="let i of [1,2,3,4,5,6,7,8,9,10]">
+      <div class="skeleton-load" style="height:16px; width: 24px; border-radius: 50%;"></div>
+      <div class="skeleton-load" style="height:16px; width: 40%; border-radius: 6px;"></div>
+      <div class="skeleton-load" style="height:22px; width: 60px; border-radius: 20px;"></div>
+      <div class="skeleton-load" style="height:16px; width: 20%; border-radius: 6px;"></div>
+    </div>
+  </div>
+
+  <!-- Problem Table -->
+  <div class="problem-table" *ngIf="!isLoading()">
+    <div class="table-header">
+      <span>Status</span>
+      <span class="title-col">Title</span>
+      <span>Difficulty</span>
+      <span>Topics</span>
+      <span>Acceptance</span>
+    </div>
+
+    <div *ngIf="filteredProblems().length === 0" class="empty-state premium-card text-center" style="padding: 48px;">
+      <mat-icon style="font-size: 48px; color: #94a3b8;">search_off</mat-icon>
+      <h3 style="color: var(--text-main); margin: 8px 0;">No problems found</h3>
+      <p style="color: var(--text-secondary);">Try adjusting your filters or search query.</p>
+    </div>
+
+    <a *ngFor="let problem of filteredProblems(); let i = index"
+       class="table-row"
+       [routerLink]="['/coding', problem.id]">
+
+      <span class="status-col">
+        <mat-icon *ngIf="problem.solved" class="solved-icon">check_circle</mat-icon>
+        <mat-icon *ngIf="!problem.solved" class="unsolved-icon">circle</mat-icon>
+      </span>
+
+      <span class="title-col">
+        <span class="problem-num">{{ problem.id }}.</span>
+        {{ problem.title }}
+      </span>
+
+      <span>
+        <span class="diff-badge" [ngClass]="getDifficultyClass(problem.difficulty)">
+          {{ problem.difficulty | titlecase }}
+        </span>
+      </span>
+
+      <span class="tags-col">
+        <span *ngFor="let tag of (problem.tags || []).slice(0, 2)" class="tag-chip">{{ tag }}</span>
+      </span>
+
+      <span class="acceptance-col">{{ problem.acceptance_rate }}%</span>
+    </a>
+  </div>
+
+</div>

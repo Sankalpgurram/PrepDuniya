@@ -1,0 +1,74 @@
+.text-center { text-align: center; }
+
+.header-section { margin-bottom: var(--space-4); }
+.header-section h1 { font-size: 32px; font-weight: 700; margin-bottom: var(--space-1); }
+.header-section p { color: var(--text-secondary); font-size: 16px; margin: 0; }
+
+.jobs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: var(--space-3);
+}
+
+.flex-card {
+  display: flex;
+  flex-direction: column;
+}
+
+mat-card-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+mat-card-subtitle {
+  color: var(--text-secondary);
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+.match-score-section {
+  margin-top: var(--space-3);
+}
+
+.score-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.score-value {
+  font-weight: 700;
+}
+
+.apply-btn {
+  width: 100%;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.empty-state, .error-state {
+  padding: 60px 20px;
+  background-color: var(--card-surface);
+  color: var(--text-secondary);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.empty-icon {
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  color: #94a3b8;
+  margin-bottom: 16px;
+}
+
+.empty-state h3 {
+  color: var(--text-main);
+  font-size: 20px;
+  margin-bottom: 8px;
+  font-weight: 600;
+}

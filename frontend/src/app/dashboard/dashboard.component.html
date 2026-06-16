@@ -1,0 +1,97 @@
+<div class="view-container">
+  <div class="welcome-section">
+    <h1>Welcome, <span class="highlight">{{ user()?.name || 'Loading...' }}</span>! 👋</h1>
+    <p>Your AI-powered career intelligence dashboard.</p>
+  </div>
+
+  <!-- Stats Section -->
+  <div class="stats-row">
+    <div class="premium-card stat-box">
+      <div class="stat-icon-wrapper blue-gradient">
+        <mat-icon>score</mat-icon>
+      </div>
+      <div class="stat-info">
+        <h3>{{ atsScore() !== null ? atsScore() + '%' : '--' }}</h3>
+        <p>Latest ATS Score</p>
+      </div>
+    </div>
+
+    <div class="premium-card stat-box">
+      <div class="stat-icon-wrapper purple-gradient">
+        <mat-icon>assignment_turned_in</mat-icon>
+      </div>
+      <div class="stat-info">
+        <h3>--</h3>
+        <p>Tests Taken</p>
+      </div>
+    </div>
+
+    <div class="premium-card stat-box">
+      <div class="stat-icon-wrapper green-gradient">
+        <mat-icon>work_outline</mat-icon>
+      </div>
+      <div class="stat-info">
+        <h3>--</h3>
+        <p>Jobs Matched</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cards Section -->
+  <div class="cards-grid">
+    <mat-card class="premium-card action-card">
+      <mat-card-header>
+        <div class="card-icon blue-gradient-light">
+          <mat-icon color="primary">description</mat-icon>
+        </div>
+        <mat-card-title>Resume Analyzer</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p>Analyze and score your resume using advanced AI models. Get instant feedback on your skills and formatting.
+        </p>
+        <button mat-flat-button color="primary" routerLink="/resume" class="action-btn">Open Analyzer</button>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="premium-card action-card">
+      <mat-card-header>
+        <div class="card-icon purple-gradient-light">
+          <mat-icon color="accent">join_inner</mat-icon>
+        </div>
+        <mat-card-title>Job Matching</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p>Find the best jobs suited for your skills. Let the AI align your resume with real-time job openings.</p>
+        <button mat-flat-button color="accent" routerLink="/jobs" class="action-btn">Explore Jobs</button>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="premium-card action-card">
+      <mat-card-header>
+        <div class="card-icon green-gradient-light">
+          <mat-icon style="color: var(--success)">laptop_mac</mat-icon>
+        </div>
+        <mat-card-title>Mock Tests</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p>Unlock AI-driven mock tests to prepare for technical interviews and coding rounds. Start practicing now.</p>
+        <button mat-flat-button style="background: var(--success); color: white;" routerLink="/mock-tests"
+          class="action-btn">Start Practice</button>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="premium-card action-card">
+      <mat-card-header>
+        <div class="card-icon" style="background: #f5f3ff;">
+          <mat-icon style="color: var(--secondary)">code</mat-icon>
+        </div>
+        <mat-card-title>Coding Practice</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p>Solve DSA problems in JavaScript, Python, Java & more. Filter by difficulty and climb the leaderboard.</p>
+        <button mat-flat-button style="background: var(--secondary); color: white;" routerLink="/coding"
+          class="action-btn">Solve Problems</button>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

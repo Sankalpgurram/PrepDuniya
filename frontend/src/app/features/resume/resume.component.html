@@ -1,0 +1,116 @@
+<div class="view-container">
+  
+  <div class="header-section text-center">
+    <h1>Resume Analyzer AI</h1>
+    <p>Upload your PDF resume to receive an instant ATS score, skill extraction, and actionable corporate feedback.</p>
+  </div>
+
+  <mat-card class="premium-card upload-card text-center">
+    <!-- Dropzone styling purely driven by conditional CSS triggers -->
+    <div class="upload-area" [class.has-file]="selectedFile">
+      <mat-icon class="upload-icon">{{ selectedFile ? 'task' : 'cloud_upload' }}</mat-icon>
+      <h3>{{ selectedFile ? selectedFile.name : 'Drag & drop or Click to upload PDF' }}</h3>
+      <p *ngIf="!selectedFile" class="hint-text">Supported format: PDF up to 5MB</p>
+      
+      <input type="file" #fileInput (change)="onFileSelected($event)" accept="application/pdf" style="display: none;">
+      <button mat-stroked-button color="primary" class="browse-btn" (click)="fileInput.click()">
+        Browse Files
+      </button>
+    </div>
+
+    <div *ngIf="errorMessage" class="error-badge">
+      <mat-icon>error</mat-icon>
+      <span>{{ errorMessage }}</span>
+    </div>
+
+    <div class="action-area">
+      <button mat-flat-button color="primary" class="analyze-btn" 
+              [disabled]="!selectedFile || isLoading" (click)="uploadAndAnalyze()">
+        <span *ngIf="!isLoading">Analyze Resume</span>
+        <span *ngIf="isLoading" class="loading-state">
+          <mat-spinner diameter="20"></mat-spinner> Parsing logic...
+        </span>
+      </button>
+    </div>
+  </mat-card>
+
+  <!-- Analysis Dashboard using Skeletons dynamically -->
+  <div *ngIf="isLoading" class="skeleton-wrapper">
+    <div class="skeleton-load skeleton-score"></div>
+    <div class="grid-2">
+      <div class="skeleton-load skeleton-box"></div>
+      <div class="skeleton-load skeleton-box"></div>
+    </div>
+  </div>
+
+  <div class="results-dashboard" *ngIf="analysisResult && !isLoading">
+    
+    <div class="score-card-wrapper">
+      <mat-card class="premium-card score-card text-center">
+        <mat-card-header style="justify-content: center;">
+          <mat-card-title>ATS Compatibility Score</mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="score-content">
+          <!-- Scaled Circular UI overriding old blocks -->
+          <div class="score-circle-modern" 
+               [ngClass]="{'border-success': analysisResult.score >= 80, 'border-warning': analysisResult.score >= 50 && analysisResult.score < 80, 'border-danger': analysisResult.score < 50}">
+            <span class="score-value" 
+                  [ngClass]="{'text-success': analysisResult.score >= 80, 'text-warning': analysisResult.score >= 50 && analysisResult.score < 80, 'text-danger': analysisResult.score < 50}">
+              {{ analysisResult.score }}
+            </span>
+          </div>
+          <p class="score-text">
+            {{ analysisResult.score >= 80 ? 'Excellent! Your resume is highly compatible with ATS.' : 
+               analysisResult.score >= 50 ? 'Good, but there is room for improvement.' : 
+               'Needs Work. Follow the suggestions below to improve.' }}
+          </p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <div class="details-grid">
+      <mat-card class="premium-card">
+        <mat-card-header>
+          <mat-icon style="color: var(--primary); margin-right: 8px;">verified</mat-icon>
+          <mat-card-title>Identified Skills</mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="chip-container">
+            <span *ngFor="let skill of analysisResult.skills" class="status-chip chip-primary">
+              {{ skill }}
+            </span>
+          <p *ngIf="!analysisResult.skills?.length" class="empty-state">No skills were clearly identified.</p>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="premium-card">
+        <mat-card-header>
+          <mat-icon style="color: var(--danger); margin-right: 8px;">error_outline</mat-icon>
+          <mat-card-title>Missing Skills</mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="chip-container">
+            <span *ngFor="let mskill of analysisResult.missing_skills" class="status-chip chip-danger">
+              {{ mskill }}
+            </span>
+          <p *ngIf="!analysisResult.missing_skills?.length" class="empty-state">No obvious missing skills!</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <mat-card class="premium-card full-width">
+      <mat-card-header>
+          <mat-icon style="color: var(--secondary); margin-right: 8px;">lightbulb</mat-icon>
+          <mat-card-title>Improvement Suggestions</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <ul class="suggestions-list">
+          <li *ngFor="let s of analysisResult.suggestions">
+            <mat-icon class="bullet-icon">check_circle</mat-icon>
+            <span>{{ s }}</span>
+          </li>
+        </ul>
+        <p *ngIf="!analysisResult.suggestions?.length" class="empty-state">No specific suggestions at this time.</p>
+      </mat-card-content>
+    </mat-card>
+
+  </div>
+</div>

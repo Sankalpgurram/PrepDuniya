@@ -1,0 +1,36 @@
+<div class="type-container">
+  <button mat-button color="primary" class="back-btn" routerLink="/mock-tests">
+    <mat-icon>arrow_back</mat-icon> Back to Companies
+  </button>
+
+  <div class="header-section">
+    <h1>{{ companyName }} Interview</h1>
+    <p>Select your preferred interview format to continue.</p>
+  </div>
+
+  <div class="type-grid">
+    <mat-card class="type-card" [routerLink]="['/mock-tests', companyId, 'technical']">
+      <mat-card-header>
+        <div class="icon-wrap tech-icon">
+          <mat-icon>terminal</mat-icon>
+        </div>
+        <mat-card-title>Technical Interview</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p>A structured format focusing on Data Structures, Algorithms, and System Design concepts. Includes timed questions and typed responses.</p>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="type-card" [routerLink]="['/mock-tests', companyId, 'hr']">
+      <mat-card-header>
+        <div class="icon-wrap hr-icon">
+          <mat-icon>record_voice_over</mat-icon>
+        </div>
+        <mat-card-title>HR / Behavioral Interview</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p>Simulated conversational flow evaluating leadership principles and company-fit. Features dynamic AI voice pacing and microphone responses.</p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

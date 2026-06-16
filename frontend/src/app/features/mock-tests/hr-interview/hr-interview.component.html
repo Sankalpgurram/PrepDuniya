@@ -1,0 +1,67 @@
+<div class="hr-container">
+  
+  <div class="header">
+    <div class="header-nav">
+      <button mat-icon-button routerLink="/mock-tests" title="Exit Interview">
+        <mat-icon>west</mat-icon>
+      </button>
+      <h2>HR Interview: {{ company }}</h2>
+    </div>
+    <button mat-stroked-button color="warn" (click)="submitInterview()">End & Evaluate</button>
+  </div>
+
+  <div *ngIf="isEvaluating" class="evaluating-state card">
+    <mat-spinner diameter="48" color="accent"></mat-spinner>
+    <h3>Finalizing AI HR Evaluation</h3>
+    <p>Please wait while we review your behavioral responses...</p>
+  </div>
+
+  <div class="chat-workspace" [hidden]="isEvaluating">
+    
+    <div class="chat-history" #chatContainer>
+      <div *ngFor="let msg of chatHistory" class="message-row" [class.ai-row]="msg.role === 'ai'" [class.user-row]="msg.role === 'user'">
+        
+        <div *ngIf="msg.role === 'ai'" class="avatar ai-avatar">
+          <mat-icon>smart_toy</mat-icon>
+        </div>
+        
+        <div class="bubble" [class.ai-bubble]="msg.role === 'ai'" [class.user-bubble]="msg.role === 'user'">
+          {{ msg.text }}
+        </div>
+
+      </div>
+
+      <div *ngIf="isAiThinking" class="message-row ai-row">
+        <div class="avatar ai-avatar">
+          <mat-icon>smart_toy</mat-icon>
+        </div>
+        <div class="bubble ai-bubble typing">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="input-area">
+      <div class="microphone-wrapper">
+        <button mat-fab [color]="isRecording ? 'warn' : 'primary'" (click)="toggleRecording()" class="mic-btn" [class.pulsing]="isRecording">
+          <mat-icon>{{ isRecording ? 'mic_off' : 'mic' }}</mat-icon>
+        </button>
+      </div>
+
+      <textarea 
+        class="chat-input" 
+        placeholder="Type your response here..." 
+        [(ngModel)]="userInputBox"
+        (keyup.enter)="sendAnswer()">
+      </textarea>
+
+      <button mat-icon-button color="primary" class="send-btn" (click)="sendAnswer()" [disabled]="!userInputBox.trim()">
+        <mat-icon>send</mat-icon>
+      </button>
+    </div>
+
+  </div>
+
+</div>

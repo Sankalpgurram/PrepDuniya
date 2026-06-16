@@ -1,0 +1,52 @@
+.text-center { text-align: center; }
+
+.header-section { margin-bottom: var(--space-6); }
+.header-section h1 { font-size: 32px; font-weight: 700; margin-bottom: var(--space-1); color: var(--text-main); }
+.header-section p { color: var(--text-secondary); font-size: 16px; margin: 0; }
+
+.company-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-3);
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.company-card {
+  cursor: pointer;
+  padding: 0;
+}
+
+.company-card:hover {
+  border-color: var(--hover-color);
+  box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
+}
+
+.logo-placeholder {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto var(--space-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  background-color: var(--bg-main);
+  transition: transform 0.3s;
+}
+
+.company-card:hover .logo-placeholder {
+  transform: scale(1.1);
+}
+
+.company-icon {
+  font-size: 36px;
+  width: 36px;
+  height: 36px;
+}
+
+.company-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-main);
+  margin: 0;
+}

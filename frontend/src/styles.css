@@ -1,0 +1,114 @@
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+
+/* ----------------------------------
+   PREPDUNIYA PREMIUM SaaS DESIGN SYSTEM
+   ----------------------------------- */
+
+:root {
+  /* Colors */
+  --primary: #2563EB;
+  --primary-hover: #1D4ED8;
+  --secondary: #7C3AED;
+  --bg-main: #F9FAFB;
+  --card-surface: #FFFFFF;
+  --border-light: #E5E7EB;
+  --text-main: #111827;
+  --text-secondary: #6B7280;
+  
+  --success: #10B981;
+  --warning: #F59E0B;
+  --danger: #EF4444;
+
+  /* Spacing Base (8px increment system) */
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+  --space-6: 48px;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ----------------------------------
+   GLOBAL UI COMPONENTS (REUSABLE)
+   ----------------------------------- */
+
+/* 1. Elevating Cards */
+.premium-card {
+  background-color: var(--card-surface);
+  border-radius: 16px;
+  border: 1px solid var(--border-light);
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+  padding: var(--space-3);
+  box-sizing: border-box;
+}
+
+.premium-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+  border-color: #cbd5e1;
+}
+
+/* 2. Status Chips */
+.status-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  font-size: 13px;
+  font-weight: 500;
+  background-color: #eff6ff; 
+  color: var(--primary);
+}
+
+.status-chip.chip-success {
+  background-color: #ecfdf5;
+  color: var(--success);
+}
+
+.status-chip.chip-warning {
+  background-color: #fef3c7;
+  color: var(--warning);
+}
+
+/* 3. Skeleton Loading Animation */
+.skeleton-load {
+  background: #e2e8f0;
+  background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
+  background-size: 400% 100%;
+  animation: shimmer 1.5s infinite linear;
+  border-radius: 4px;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* 4. Main Views & Fade Ins */
+.view-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--space-4);
+  animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Material Override Integrations */
+.mat-mdc-button.mat-unthemed, .mat-mdc-raised-button.mat-unthemed, .mat-mdc-outlined-button.mat-unthemed {
+  font-family: 'Inter', sans-serif !important;
+  border-radius: 8px !important;
+}

@@ -1,0 +1,61 @@
+<div class="view-container">
+  <div class="header-section text-center">
+    <h1>Your Job Matches</h1>
+    <p>AI-powered recommendations synced to your dynamic Resume Skills.</p>
+  </div>
+
+  <div *ngIf="skills.length === 0 && !isLoading" class="premium-card empty-state text-center">
+    <mat-icon class="empty-icon">description</mat-icon>
+    <h3>No Skills Available</h3>
+    <p>Please use the Resume Analyzer first to extract your skills.</p>
+    <button mat-flat-button color="primary" routerLink="/resume" style="margin-top: 16px;">Go to Analyzer</button>
+  </div>
+
+  <div *ngIf="isLoading" class="jobs-grid">
+    <div class="premium-card" *ngFor="let i of [1,2,3,4]">
+      <div class="skeleton-load" style="height: 24px; width: 60%; margin-bottom: 8px;"></div>
+      <div class="skeleton-load" style="height: 16px; width: 40%; margin-bottom: 24px;"></div>
+      <div class="skeleton-load" style="height: 12px; width: 90%; margin-bottom: 16px;"></div>
+      <div class="skeleton-load" style="height: 36px; width: 100%; border-radius: 8px;"></div>
+    </div>
+  </div>
+
+  <div *ngIf="errorMessage" class="premium-card error-state text-center" style="color: var(--danger); background: #fef2f2;">
+    <mat-icon>error_outline</mat-icon>
+    <p>{{ errorMessage }}</p>
+  </div>
+
+  <div *ngIf="!isLoading && jobs.length === 0 && skills.length > 0 && !errorMessage" class="premium-card empty-state text-center">
+    <mat-icon class="empty-icon" style="color: var(--warning);">search_off</mat-icon>
+    <h3>No Matches Found</h3>
+    <p>We couldn't find any relevant jobs matching your skills right now. Try expanding your resume.</p>
+  </div>
+
+  <div *ngIf="!isLoading && jobs.length > 0" class="jobs-grid">
+    <mat-card *ngFor="let job of jobs" class="premium-card flex-card">
+      <mat-card-header style="padding: 0; margin-bottom: 16px;">
+        <mat-card-title>{{ job.title }}</mat-card-title>
+        <mat-card-subtitle>{{ job.company }} &bull; {{ job.location }}</mat-card-subtitle>
+      </mat-card-header>
+      
+      <mat-card-content style="flex: 1; padding: 0;">
+        <div class="match-score-section">
+          <div class="score-header">
+            <span>Match Predictor</span>
+            <span class="score-value" [ngStyle]="{'color': job.matchScore >= 80 ? 'var(--success)' : 'var(--warning)'}">
+              {{ job.matchScore }}%
+            </span>
+          </div>
+          <!-- Clean thin rendering -->
+          <mat-progress-bar mode="determinate" [value]="job.matchScore" 
+            [color]="job.matchScore >= 80 ? 'primary' : 'accent'" style="height: 6px; border-radius: 4px;">
+          </mat-progress-bar>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions style="padding: 0; margin-top: 16px;">
+        <a mat-flat-button color="primary" [href]="job.applyLink" target="_blank" class="apply-btn">Apply Now</a>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>

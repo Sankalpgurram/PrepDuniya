@@ -1,0 +1,53 @@
+<div class="interview-container">
+  
+  <div *ngIf="isLoading" class="loading-state">
+    <mat-spinner diameter="48"></mat-spinner>
+    <h3>Generating {{ company }} Interview Questions...</h3>
+    <p>Loading AI evaluation protocols specific to your role.</p>
+  </div>
+
+  <div *ngIf="errorMessage" class="error-state card">
+    <mat-icon color="warn">error_outline</mat-icon>
+    <p>{{ errorMessage }}</p>
+    <button mat-button color="primary" (click)="ngOnInit()">Retry</button>
+  </div>
+
+  <div *ngIf="!isLoading && !isEvaluating && questions.length > 0" class="workspace">
+    <div class="top-bar">
+      <div class="progress">
+        Question {{ currentIndex + 1 }} of {{ questions.length }}
+      </div>
+      <div class="timer" [class.urgent]="timerVal <= 30">
+        <mat-icon>timer</mat-icon> {{ formattedTime }}
+      </div>
+    </div>
+    <mat-progress-bar mode="determinate" [value]="((currentIndex + 1) / questions.length) * 100"></mat-progress-bar>
+
+    <mat-card class="question-card">
+      <mat-card-content>
+        <h2>{{ questions[currentIndex] }}</h2>
+      </mat-card-content>
+    </mat-card>
+
+    <div class="answer-section">
+      <textarea 
+        class="answer-input"
+        placeholder="Type your precise technical answer here... Think about edge cases and complexities."
+        [(ngModel)]="currentAnswer"
+      ></textarea>
+      
+      <div class="actions">
+        <button mat-flat-button color="primary" (click)="nextQuestion()">
+          {{ currentIndex === questions.length - 1 ? 'Submit Evaluation' : 'Next Question' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="isEvaluating" class="evaluating-state">
+    <mat-spinner diameter="48" color="accent"></mat-spinner>
+    <h3>Analyzing your responses...</h3>
+    <p>The AI is strictly reviewing your technical prowess across these {{ questions.length }} questions.</p>
+  </div>
+
+</div>

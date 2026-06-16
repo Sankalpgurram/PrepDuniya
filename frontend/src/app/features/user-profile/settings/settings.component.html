@@ -1,0 +1,102 @@
+<div class="settings-container" [@pageAnimations]>
+  <div class="settings-header">
+    <h1>Account Settings</h1>
+    <p>Manage your profile, security, and preferences</p>
+  </div>
+
+  <div class="settings-grid">
+    <!-- Profile Settings -->
+    <mat-card class="settings-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>person</mat-icon>
+        <mat-card-title>Profile Information</mat-card-title>
+        <mat-card-subtitle>Update your personal details</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <form [formGroup]="profileForm" (ngSubmit)="updateProfile()" class="settings-form">
+          <div class="profile-pic-container">
+            <div class="avatar-upload-wrapper" (click)="fileInput.click()">
+              <div class="avatar-preview-box">
+                <img *ngIf="profileForm.get('profile_picture')?.value" 
+                     [src]="getProfilePicUrl(profileForm.get('profile_picture')?.value)" 
+                     alt="Profile Picture" class="avatar-img">
+                <div *ngIf="!profileForm.get('profile_picture')?.value" class="avatar-placeholder">
+                  {{ userStateService.userProfile()?.name ? userStateService.userProfile().name.charAt(0).toUpperCase() : 'U' }}
+                </div>
+              </div>
+              <div class="avatar-hover-overlay" [class.uploading]="uploading">
+                <mat-spinner *ngIf="uploading" diameter="32" class="spinner-center"></mat-spinner>
+                <mat-icon *ngIf="!uploading" class="camera-icon">photo_camera</mat-icon>
+                <span *ngIf="!uploading" class="overlay-text">Change Photo</span>
+              </div>
+            </div>
+            <input #fileInput type="file" (change)="onFileSelected($event)" accept="image/*" style="display: none">
+            <div class="upload-hint">Allowed formats: JPG, PNG, WEBP. Max 2MB.</div>
+          </div>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Full Name</mat-label>
+            <input matInput formControlName="name">
+          </mat-form-field>
+          
+          <button mat-flat-button color="primary" [disabled]="loading || uploading">Save Profile</button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Security Settings -->
+    <mat-card class="settings-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>security</mat-icon>
+        <mat-card-title>Security</mat-card-title>
+        <mat-card-subtitle>Update your password</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <form [formGroup]="passwordForm" (ngSubmit)="changePassword()" class="settings-form">
+          <mat-form-field appearance="outline">
+            <mat-label>Old Password</mat-label>
+            <input matInput type="password" formControlName="oldPassword">
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>New Password</mat-label>
+            <input matInput type="password" formControlName="newPassword">
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Confirm New Password</mat-label>
+            <input matInput type="password" formControlName="confirmPassword">
+          </mat-form-field>
+          <div *ngIf="passwordForm.errors?.['mismatch']" class="error-msg">Passwords do not match</div>
+          <button mat-flat-button color="warn" [disabled]="loading || passwordForm.invalid">Change Password</button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Preferences -->
+    <mat-card class="settings-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>settings</mat-icon>
+        <mat-card-title>Preferences</mat-card-title>
+        <mat-card-subtitle>Customize your experience</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <form [formGroup]="preferencesForm" class="preferences-form">
+          <div class="toggle-item">
+            <div class="toggle-label">
+              <h3>Dark Mode</h3>
+              <p>Switch between light and dark themes</p>
+            </div>
+            <mat-slide-toggle formControlName="darkMode"></mat-slide-toggle>
+          </div>
+          <div class="toggle-item">
+            <div class="toggle-label">
+              <h3>Email Notifications</h3>
+              <p>Receive updates and interview reminders</p>
+            </div>
+            <mat-slide-toggle formControlName="emailNotifications"></mat-slide-toggle>
+          </div>
+          <button mat-stroked-button (click)="updateProfile()" class="pref-btn">Save Preferences</button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

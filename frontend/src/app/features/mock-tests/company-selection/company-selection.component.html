@@ -1,0 +1,20 @@
+<div class="view-container text-center">
+  <div class="header-section">
+    <h1>Select Target Company</h1>
+    <p>Choose the company you are preparing for to start a tailored AI-mock interview.</p>
+  </div>
+
+  <div class="company-grid">
+    <mat-card *ngFor="let company of companies" 
+              class="premium-card company-card text-center" 
+              [routerLink]="['/mock-tests', company.id]"
+              [style.--hover-color]="company.color">
+      <mat-card-content style="padding: 24px 0;">
+        <div class="logo-placeholder" [style.color]="company.color">
+          <mat-icon class="company-icon">business</mat-icon>
+        </div>
+        <h3 class="company-name">{{ company.name }}</h3>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

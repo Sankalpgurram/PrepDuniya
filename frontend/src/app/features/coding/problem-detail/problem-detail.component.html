@@ -1,0 +1,137 @@
+<!-- Loading spinner -->
+<div *ngIf="isLoading()" class="center-state">
+  <mat-spinner diameter="44"></mat-spinner>
+  <p>Loading problem…</p>
+</div>
+
+<!-- Error state -->
+<div *ngIf="!isLoading() && loadError()" class="center-state">
+  <mat-icon style="font-size:48px;width:48px;height:48px;color:#ef4444;">error_outline</mat-icon>
+  <p style="color:#1e293b;font-weight:600;margin:12px 0 4px;">{{ loadError() }}</p>
+  <a routerLink="/coding" style="color:var(--primary);font-size:14px;">← Back to problems</a>
+</div>
+
+<!-- Loaded -->
+<div *ngIf="!isLoading() && problem()" class="ide-wrap">
+
+  <!-- ── LEFT PANEL ───────────────────────────────────────────────── -->
+  <div class="prob-panel">
+    <div class="prob-header">
+      <a routerLink="/coding" class="back-link">
+        <mat-icon>arrow_back</mat-icon> Problems
+      </a>
+      <div class="prob-meta">
+        <span class="prob-num">#{{ problem().id }}</span>
+        <h1 class="prob-title">{{ problem().title }}</h1>
+        <span class="diff-pill" [ngClass]="diffClass()">{{ problem().difficulty | titlecase }}</span>
+      </div>
+    </div>
+
+    <div class="prob-body">
+      <p class="prob-desc">{{ problem().description }}</p>
+
+      <div *ngIf="problem().examples?.length" class="section">
+        <h4>Examples</h4>
+        <div *ngFor="let ex of problem().examples; let i = index" class="ex-card">
+          <div class="ex-label">Example {{ i+1 }}</div>
+          <div><span class="io">Input:</span> <code>{{ ex.input }}</code></div>
+          <div><span class="io">Output:</span> <code>{{ ex.output }}</code></div>
+          <div *ngIf="ex.explanation"><span class="io">Explanation:</span> {{ ex.explanation }}</div>
+        </div>
+      </div>
+
+      <div *ngIf="problem().constraints" class="section">
+        <h4>Constraints</h4>
+        <div class="constraint-list">
+          <div *ngFor="let l of problem().constraints.split('\n')" class="c-line">
+            <span>•</span><code>{{ l }}</code>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="problem().tags?.length" class="section">
+        <h4>Topics</h4>
+        <div class="tag-row">
+          <span *ngFor="let t of problem().tags" class="topic-tag">{{ t }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── RIGHT PANEL ──────────────────────────────────────────────── -->
+  <div class="editor-panel">
+
+    <!-- Language tab bar -->
+    <div class="lang-bar">
+      <button *ngFor="let l of languages"
+              class="lang-tab"
+              [class.active]="selectedLanguage() === l.value"
+              (click)="changeLanguage(l.value)">
+        {{ l.icon }} {{ l.label }}
+      </button>
+      <button class="reset-btn" (click)="resetCode()" title="Reset to starter">
+        <mat-icon>refresh</mat-icon>
+      </button>
+    </div>
+
+    <!-- Code editor (textarea) -->
+    <div class="editor-box">
+      <textarea
+        class="code-ta"
+        [(ngModel)]="codeText"
+        (keydown)="handleKey($event)"
+        spellcheck="false"
+        autocomplete="off"
+        autocorrect="off"
+        autocapitalize="off"
+        placeholder="Write your solution here…">
+      </textarea>
+    </div>
+
+    <!-- Submit bar -->
+    <div class="sub-bar">
+      <span class="ai-pill">
+        <mat-icon style="font-size:13px;width:13px;height:13px;vertical-align:middle;">smart_toy</mat-icon>
+        AI Evaluated · Gemini 2.5 Flash
+      </span>
+      <button class="sub-btn" [disabled]="isSubmitting()" (click)="submitCode()">
+        <ng-container *ngIf="!isSubmitting()">
+          <mat-icon style="font-size:16px;width:16px;height:16px;vertical-align:middle;">send</mat-icon>
+          Submit
+        </ng-container>
+        <ng-container *ngIf="isSubmitting()">
+          <mat-spinner diameter="14" style="display:inline-block;margin-right:6px;"></mat-spinner>
+          Evaluating…
+        </ng-container>
+      </button>
+    </div>
+
+    <!-- Result panel -->
+    <div *ngIf="showResult() && result()" class="result-panel" [ngClass]="statusInfo().cls">
+      <div class="res-header">
+        <span class="res-status">{{ statusInfo().label }}</span>
+        <span *ngIf="result().score > 0" class="res-score">+{{ result().score }} pts</span>
+      </div>
+      <div *ngIf="result().test_cases_total" class="tc-row">
+        <div class="tc-text">
+          <b>{{ result().test_cases_passed }}/{{ result().test_cases_total }}</b> test cases passed
+        </div>
+        <div class="tc-bar">
+          <div class="tc-fill"
+               [class.bad]="result().status !== 'accepted'"
+               [style.width.%]="(result().test_cases_passed/result().test_cases_total)*100">
+          </div>
+        </div>
+      </div>
+      <p class="res-fb">{{ result().feedback }}</p>
+      <div *ngIf="result().time_complexity" class="cx-row">
+        <span class="cx">⏱ Time: {{ result().time_complexity }}</span>
+        <span class="cx">💾 Space: {{ result().space_complexity }}</span>
+      </div>
+      <ul *ngIf="result().hints?.length && result().status !== 'accepted'" class="hints">
+        <li *ngFor="let h of result().hints">{{ h }}</li>
+      </ul>
+    </div>
+
+  </div><!-- /editor-panel -->
+</div><!-- /ide-wrap -->

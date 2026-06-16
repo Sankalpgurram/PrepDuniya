@@ -1,0 +1,131 @@
+<mat-sidenav-container class="layout-container">
+
+  <mat-sidenav mode="side" opened [class.collapsed]="isSidebarCollapsed" class="premium-sidebar">
+    <div class="sidebar-header">
+      <div class="logo">
+        <img src="logo.png" class="logo-img" alt="PrepDuniya Logo">
+        <span *ngIf="!isSidebarCollapsed">PrepDuniya</span>
+      </div>
+    </div>
+
+    <mat-nav-list class="sidebar-menu">
+      <a mat-list-item routerLink="/dashboard" routerLinkActive="active-link" class="menu-item">
+        <mat-icon matListItemIcon>space_dashboard</mat-icon>
+        <span *ngIf="!isSidebarCollapsed" matListItemTitle>Dashboard</span>
+      </a>
+
+      <a mat-list-item routerLink="/resume" routerLinkActive="active-link" class="menu-item">
+        <mat-icon matListItemIcon>document_scanner</mat-icon>
+        <span *ngIf="!isSidebarCollapsed" matListItemTitle>Resume Analyzer</span>
+      </a>
+
+      <a mat-list-item routerLink="/jobs" routerLinkActive="active-link" class="menu-item">
+        <mat-icon matListItemIcon>work</mat-icon>
+        <span *ngIf="!isSidebarCollapsed" matListItemTitle>Job Matching</span>
+      </a>
+
+      <a mat-list-item routerLink="/mock-tests" routerLinkActive="active-link" class="menu-item">
+        <mat-icon matListItemIcon>laptop_mac</mat-icon>
+        <span *ngIf="!isSidebarCollapsed" matListItemTitle>Mock Interviews</span>
+      </a>
+
+      <a mat-list-item routerLink="/coding" routerLinkActive="active-link" class="menu-item">
+        <mat-icon matListItemIcon>code</mat-icon>
+        <span *ngIf="!isSidebarCollapsed" matListItemTitle>Coding Practice</span>
+      </a>
+
+      <a mat-list-item routerLink="/profile" routerLinkActive="active-link" class="menu-item">
+        <mat-icon matListItemIcon>person</mat-icon>
+        <span *ngIf="!isSidebarCollapsed" matListItemTitle>Profile</span>
+      </a>
+
+      <a mat-list-item *ngIf="user()?.role === 'admin'" routerLink="/admin" routerLinkActive="active-link"
+        class="menu-item admin-link">
+        <mat-icon matListItemIcon>admin_panel_settings</mat-icon>
+        <span *ngIf="!isSidebarCollapsed" matListItemTitle>Admin Panel</span>
+      </a>
+    </mat-nav-list>
+
+    <div class="sidebar-footer" *ngIf="!isSidebarCollapsed">
+      <div class="mini-profile-card">
+        <p>Premium plan unlocked</p>
+      </div>
+    </div>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="main-content-area">
+    <mat-toolbar class="premium-topbar">
+      <div class="left-section">
+        <button mat-icon-button (click)="toggleSidebar()">
+          <mat-icon>menu</mat-icon>
+        </button>
+        <h2 class="page-title">{{ currentTitle }}</h2>
+      </div>
+
+      <div class="right-section">
+        <button mat-icon-button class="notification-btn" [matMenuTriggerFor]="notifMenu" (click)="loadNotifications()">
+          <mat-icon [matBadge]="notificationService.unreadCount() || null" matBadgeColor="warn" matBadgeSize="small">
+            {{ notificationService.unreadCount() > 0 ? 'notifications' : 'notifications_none' }}
+          </mat-icon>
+        </button>
+
+        <mat-menu #notifMenu="matMenu" class="notification-dropdown">
+          <div class="notif-header">
+            <h3>Notifications</h3>
+            <button mat-button color="primary" (click)="notificationService.markAllAsRead()">Mark all as read</button>
+          </div>
+          <mat-divider></mat-divider>
+          <div class="notif-list" *ngIf="notifications.length > 0; else noNotif">
+            <button mat-menu-item *ngFor="let n of notifications" (click)="markRead(n)" [class.unread]="!n.is_read"
+              class="notif-item">
+              <mat-icon [color]="n.type === 'interview' ? 'primary' : 'accent'">
+                {{ n.type === 'interview' ? 'event' : 'info' }}
+              </mat-icon>
+              <div class="notif-content">
+                <p class="notif-msg">{{ n.message }}</p>
+                <span class="notif-time">{{ n.created_at | date:'shortTime' }}</span>
+              </div>
+            </button>
+          </div>
+          <ng-template #noNotif>
+            <div class="no-notif">No new notifications</div>
+          </ng-template>
+        </mat-menu>
+
+        <button type="button" [matMenuTriggerFor]="profileMenu" class="user-dropdown-btn">
+          <div class="avatar-circle">
+            <img *ngIf="user()?.profile_picture" 
+                 [src]="getProfilePicUrl(user().profile_picture)" 
+                 alt="Avatar" class="navbar-avatar-img">
+            <span *ngIf="!user()?.profile_picture">
+              {{ user()?.name ? user().name.charAt(0).toUpperCase() : 'U' }}
+            </span>
+          </div>
+          <span class="user-greeting">Hi, {{ user()?.name || 'User' }}</span>
+          <mat-icon>expand_more</mat-icon>
+        </button>
+        <mat-menu #profileMenu="matMenu" class="premium-mat-menu">
+          <button mat-menu-item routerLink="/profile">
+            <mat-icon>person</mat-icon>
+            <span>My Profile</span>
+          </button>
+          <button mat-menu-item routerLink="/settings">
+            <mat-icon>settings</mat-icon>
+            <span>Settings</span>
+          </button>
+          <mat-divider></mat-divider>
+          <button mat-menu-item (click)="logout()" class="logout-text">
+            <mat-icon color="warn">logout</mat-icon>
+            <span>Log out</span>
+          </button>
+        </mat-menu>
+      </div>
+    </mat-toolbar>
+
+    <!-- Scrollable Router Outlet -->
+    <div class="scroll-container">
+      <router-outlet></router-outlet>
+    </div>
+
+  </mat-sidenav-content>
+</mat-sidenav-container>

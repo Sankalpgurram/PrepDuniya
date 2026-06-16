@@ -1,0 +1,105 @@
+<div class="admin-container" [@pageAnimations]>
+  <div class="admin-header">
+    <h1>Admin Panel</h1>
+    <p>Manage interview questions and platform content</p>
+  </div>
+
+  <div class="admin-grid">
+    <!-- Question Form -->
+    <div class="form-section">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>{{ editingId ? 'Edit Question' : 'Add New Question' }}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <form [formGroup]="questionForm" (ngSubmit)="saveQuestion()" class="q-form">
+            <mat-form-field appearance="outline">
+              <mat-label>Question Text</mat-label>
+              <textarea matInput formControlName="question" rows="3"></textarea>
+            </mat-form-field>
+
+            <div class="form-row">
+              <mat-form-field appearance="outline">
+                <mat-label>Type</mat-label>
+                <mat-select formControlName="type">
+                  <mat-option value="technical">Technical</mat-option>
+                  <mat-option value="hr">HR / Behavioral</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Category</mat-label>
+                <input matInput formControlName="category" placeholder="e.g. Java, System Design">
+              </mat-form-field>
+            </div>
+
+            <div class="form-row">
+              <mat-form-field appearance="outline">
+                <mat-label>Target Company</mat-label>
+                <input matInput formControlName="company" placeholder="e.g. Google (Optional)">
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Target Role</mat-label>
+                <input matInput formControlName="role" placeholder="e.g. Frontend Engineer">
+              </mat-form-field>
+            </div>
+
+            <div class="form-actions">
+              <button mat-button type="button" (click)="resetForm()">Cancel</button>
+              <button mat-flat-button color="primary" [disabled]="questionForm.invalid">
+                {{ editingId ? 'Update Question' : 'Add Question' }}
+              </button>
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Questions Table -->
+    <div class="table-section" [@listAnimation]="questions.length">
+      <mat-card>
+        <mat-card-content>
+          <table mat-table [dataSource]="questions" class="mat-elevation-z0">
+            <ng-container matColumnDef="question">
+              <th mat-header-cell *matHeaderCellDef> Question </th>
+              <td mat-cell *matCellDef="let element" class="q-text"> {{element.question}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="type">
+              <th mat-header-cell *matHeaderCellDef> Type </th>
+              <td mat-cell *matCellDef="let element"> 
+                <span class="type-pill" [class.hr]="element.type === 'hr'">{{element.type}}</span>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="category">
+              <th mat-header-cell *matHeaderCellDef> Category </th>
+              <td mat-cell *matCellDef="let element"> {{element.category || 'N/A'}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="company">
+              <th mat-header-cell *matHeaderCellDef> Company </th>
+              <td mat-cell *matCellDef="let element"> {{element.company || 'All'}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef> Actions </th>
+              <td mat-cell *matCellDef="let element">
+                <button mat-icon-button color="primary" (click)="editQuestion(element)">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" (click)="deleteQuestion(element.id)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>
